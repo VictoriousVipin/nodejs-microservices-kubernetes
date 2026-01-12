@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+    name: rabbitmq
+spec:
+    serviceName: "rabbitmq"
+    replicas: 1
+    selector:
+        matchLabels:
+            app: rabbitmq
+    template:
+        metadata:
+            labels:
+                app: rabbitmq
+        spec:
+            containers:
+                - name: rabbitmq
+                  image: rabbitmq:3-management
+                  ports:
+                      - containerPort: 5672
+                      - containerPort: 15672
+                  env:
+                      - name: RABBITMQ_DEFAULT_USER
+                        valueFrom:
+                            configMapKeyRef:
+                                name: rabbitmq-config
+                                key: RABBITMQ_DEFAULT_USER
+                      - name: RABBITMQ_DEFAULT_PASS
+                        valueFrom:
+                            configMapKeyRef:
+                                name: rabbitmq-config
+                                key: RABBITMQ_DEFAULT_PASS
+                  volumeMounts:
+                      - name: rabbitmq-storage
+                        mountPath: /var/lib/rabbitmq
+    volumeClaimTemplates:
+        - metadata:
+              name: rabbitmq-storage
+          spec:
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                  requests:
+                      storage: 1Gi
