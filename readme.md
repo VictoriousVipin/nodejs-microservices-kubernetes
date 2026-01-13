@@ -202,3 +202,5 @@ To remove all resources:
 kubectl delete -f k8s/
 kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/cloud/deploy.yaml
 ```
+
+[Watch the video](https://www.youtube.com/watch?v=5gX2iIVks4o)
